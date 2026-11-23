@@ -1,0 +1,24 @@
+# AdaJEPA CEM planning on PushObj with slow and fast weights (planning/sea_mpc.py).
+# Streaming slow weights:  python plan.py --config-name sea_plan_cem_pushobj.yaml ...
+# Calibration slow weights: run once with planner.sea.stream_steps=0 planner.sea.dump_dir=<dir> on
+#   calibration targets, then planner.sea.stream_steps=0 planner.sea.slow_init=<file> planner.sea.calib_dir=<dir>
+defaults:
+  - adajepa_plan_cem_pushobj
+  - _self_
+
+planner:
+  _target_: planning.sea_mpc.SEAMPCPlanner
+  sea:
+    stream_steps: 20
+    stream_lr: 1e-4      # 5e-4 for the visual-shift checkpoint
+    stream_batch: 16
+    seed: 0
+    slow_init: null
+    calib_dir: null
+    dump_dir: null
+    offline:
+      lrs: "5e-4,1e-4,3e-5"
+      max_steps: 2000
+      batch: 16
+      eval_every: 100
+      max_episodes: 0
